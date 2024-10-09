@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from schafkopf.game_modes import NO_GAME, PARTNER_MODE, SOLO, WENZ
 from schafkopf.suits import ACORNS, BELLS, LEAVES, HEARTS
 from schafkopf.trick import Trick
@@ -19,26 +20,25 @@ class DataScraper():
                                'Eichel-Zehn': (6, 3), 'Die Alte': (7, 3)}
 
     def login_to_sauspiel(self, username, password):
-        chromedriver = 'C:\\Program Files\\ChromeDriver\\chromedriver.exe'
-        driver = webdriver.Chrome(chromedriver)
+        driver = webdriver.Chrome()
         driver.get('http://www.sauspiel.de/spiele')
-        username_box = driver.find_element_by_name('login')
+        username_box = driver.find_element(By.NAME, 'login')
         username_box.send_keys(username)
-        password_box = driver.find_element_by_name('password')
+        password_box = driver.find_element(By.NAME, 'password')
         password_box.send_keys(password)
         password_box.submit()
         return driver
 
     def get_html(self, game_number, driver):
 
-        game_search_box = driver.find_element_by_name('game_id')
+        game_search_box = driver.find_element(By.NAME, 'game_id')
         game_search_box.send_keys(str(game_number))
         game_search_box.submit()
 
         html = driver.page_source
 
         driver.back()
-        game_search_box = driver.find_element_by_name('game_id')
+        game_search_box = driver.find_element(By.NAME, 'game_id')
         game_search_box.clear()
 
         return html
